@@ -1,5 +1,6 @@
 use crate::utils::candle::*;
 
+#[derive(Debug)]
 pub struct Order{
     pub quantity_buy:i32, //quantity of the share bought
     pub profit:f32, //the selling price of the shares

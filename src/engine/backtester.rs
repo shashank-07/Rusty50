@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use super::{strategy::*,order::*};
 use serde_json::{Value as JsonValue, json,Map};
 use crate::utils::{candle::*,converters::*};
-pub fn backtest(raw_data:&String,strat: &mut impl Strategy){
+pub fn backtest(raw_data:&String,strat: &mut impl Strategy,budget:f32)->Order{
     //Parsing raw data into vector of candles
     let data=match getData(raw_data){
         Ok(vec)=>vec,
@@ -11,14 +11,14 @@ pub fn backtest(raw_data:&String,strat: &mut impl Strategy){
     }; 
     
     //Creating a new order struct to manage all the orders of the particular stock
-    let mut order=new_Order(0, 0.0,0.0,0.0,5000.0);
+    let mut order=new_Order(0, 0.0,0.0,0.0,budget);
     //backtesting startegy by iterating through price data over time
     for price in data{
         strat.execute(&price,&mut order);
     }
-
+    order
     //all of the order stored in the order struct.
-    println!("Final quantity spent = {}, and final value  is  {}",order.quantity_buy,order.budget);
+    
 }
 #[derive(Deserialize, Debug)]
 struct Wick {  
@@ -47,7 +47,7 @@ pub fn getData(contents:&String) -> Result<Vec<Candle>,&str> {
 
         for (key, value) in p["Time Series (Daily)"].as_object().unwrap() {
             
-            
+            println!("{}",key);
             let temp=value.to_string();
             let mut k=temp;
             k=k.replace("1. open", "open");
@@ -86,3 +86,22 @@ pub fn getData(contents:&String) -> Result<Vec<Candle>,&str> {
     }
     
 }
+
+#[cfg(test)]
+
+mod tests{
+    
+    
+    #[test]
+    fn one_result(){
+       
+    }
+
+    #[test]
+    fn case_insensitive(){
+       
+
+    }
+
+}
+

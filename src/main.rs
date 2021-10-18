@@ -16,9 +16,10 @@ use crate::utils::types::*;
 
 
 fn main() {
-    let contents = fs::read_to_string("./sample_stream.json").expect("Cant read from file");
-    let mut mov_av_strat=MovingAverage::new(String::from("TCS"), security_type::EQUITY,Interval::D1,50);
-    backtest(&contents,&mut mov_av_strat);
+    let contents = fs::read_to_string("./test_stream.json").expect("Cant read from file");
+    let mut mov_av_strat=MovingAverage::new(String::from("TCS"), security_type::EQUITY,Interval::D1,25);
+    let order=backtest(&contents,&mut mov_av_strat,5000.0);
+    println!("{:?}",order);
 }
 
 
