@@ -52,4 +52,4 @@ To contribute to the project, check out our guide : [contributing].
 Feel free to message us on [discord] or hop on a call with us to clarify anything or just to talk about Rust or the project!
 
 [contributing]: https://github.com/shashank-07/Rusty50/blob/main/contributing.md
-[discord]: https://dwoc.io/project/616bcadf22fc410012e9a5d9
+[discord]: https://discord.com/channels/762198026378543145/899649935874617344

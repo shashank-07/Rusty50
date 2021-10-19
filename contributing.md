@@ -129,4 +129,4 @@ TODO
 [`testing`]: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
 [irlo]: https://internals.rust-lang.org/
 [subcommands]: https://doc.rust-lang.org/cargo/reference/external-tools.html#custom-subcommands
-[discord]: https://dwoc.io/project/616bcadf22fc410012e9a5d9
+[discord]: https://discord.com/channels/762198026378543145/899649935874617344
