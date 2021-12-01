@@ -22,6 +22,11 @@ to accommodate any strategies from simple mathematical formulas to advanced mach
 # Contributing
 To contribute to the project, check out our guide : [contributing].
 
+# Phase 1 architecture
+![architecture](https://user-images.githubusercontent.com/38216646/144247214-e9ab88c6-446f-4c3f-9806-ba59db4bda50.jpg)
+
+
+
 # Areas to work on -
 >*Note* - This is not an exhaustive list of things to-do. We are open to any suggestions or sub-projects that you are interested in and want to work on!
 
