@@ -1,7 +1,3 @@
-pub enum security_type {
-    EQUITY,
-    OPTIONS
-}
 pub enum Interval {
     MI1,
     MI5,

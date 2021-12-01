@@ -1,45 +1,52 @@
-use std::collections::HashMap;
-
 use crate::utils::{types::*,candle::*};
 use crate::engine::{strategy::*,order::*};
 use crate::indicators::moving_average::*;
-pub struct MovingAverage{
+
+use binance::account::{self, Account};
+use binance::model::Kline;
+pub struct MovingAverageStrategy{
     security: String,
-    sec_type: security_type,
-    indicator:moving_average
+    indicator:MovingAverage
 }
-impl MovingAverage{
-    pub fn getName(&self)->&String{
-        &self.security
-    }
+impl MovingAverageStrategy{
     pub fn new(
         security:String,
-        sec_type:security_type,
         interval: Interval,
         data_points:usize
-        )->MovingAverage{
-        MovingAverage {
+        )->MovingAverageStrategy{
+            MovingAverageStrategy {
             security,
-            sec_type,
-            indicator:moving_average::new(interval,data_points)
+            indicator:MovingAverage::new(interval,data_points)
         }
     }
   
    
 }
-impl Strategy for MovingAverage{
-     fn execute(&mut self, candle: &Candle,order: &mut Order) {
+impl Strategy for MovingAverageStrategy{
+     fn execute(&mut self, candle: &Kline,order: &mut Order,acccount:&Account) {
         
 
         let ma_val=self.indicator.getValue(candle);
-        if(ma_val>0.0){
-            if(candle.close>ma_val){
-                order.buy(candle, 1.0);
-            }else if(candle.close<ma_val){
-                order.sell(candle, 1.0);
+        let close = candle.close.parse::<f32>().unwrap();
+
+        if ma_val>0.0 {
+            if close>ma_val {
+                match order.buy(candle, 1.0){
+                    Err(e)=>(),
+                    _=>println!("MA = {}",ma_val)
+                }
+            }else if close<ma_val {
+                match order.sell(candle, 1.0){
+                    Err(e)=>(),
+                    _=>println!("MA = {}",ma_val)
+                }
                 
             }  
         }
+    }
+
+    fn getSymbol(&self)->&String {
+        &self.security
     }
 }
 

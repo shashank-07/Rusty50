@@ -10,3 +10,11 @@ serde = "1.0"
 serde_json = "1.0"
 serde_derive = "1.0"
 queues = "1.0.0"
+priority-queue = "1.2.0"
+ordered-float = "2.0"
+chrono = "0.4.19"
+lru = "0.7.0"
+dotenv = "0.15.0"
+dotenv_codegen = "0.15.0"
+binance = { git = "https://github.com/wisespace-io/binance-rs.git" }
+

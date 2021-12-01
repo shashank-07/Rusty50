@@ -1,35 +1,38 @@
-//Moving average indicator calculates mpoving average of the last 50 candles, returns 0 if period is less than 50.
+//Moving average indicator calculates mpoving average of the last n (n = period) candles, returns 0 if period is less than 50.
 
-//the latest candles is stored in queue so when we are going to 51st candle 1st candle gets popped out
+//the latest candles is stored in queue so when we are going to n+1 candle 1st candle gets popped out
 use crate::utils::{candle::*, types::*};
 
 
+use binance::model::Kline;
 use queues::*;
 
-pub struct moving_average{
+pub struct MovingAverage{
     interval: Interval,
-    data_points:usize,
+    period:usize,
     value:f32,
     prices:Queue<f32>,
 }
 
-impl moving_average{
+impl MovingAverage{
     pub fn new(
         interval: Interval,
-        data_points:usize,
-    )->moving_average{
-        moving_average{
+        period:usize,
+    )->MovingAverage{
+        MovingAverage{
             interval,
-            data_points,
+            period,
             value:0.0,
             prices:queue![]
         }
     }
-    pub fn getValue(&mut self,candle:&Candle)->f32{
+    pub fn getValue(&mut self,candle:&Kline)->f32{
         let mut res=0.0;
-        if(self.prices.size()<self.data_points){
-            self.prices.add(candle.close);
-            self.value+=candle.close;
+        let close = candle.close.parse::<f32>().unwrap();
+
+        if self.prices.size()<self.period {
+            self.prices.add(close).unwrap();
+            self.value+=close;
             
             
         }else{
@@ -40,13 +43,13 @@ impl moving_average{
 
                 },
                 Err(e)=>{
-                    println!("queue empty ig {}",e);
+                    println!("queue empty {}",e);
                     return 0.0;
                 }
             }
-            self.prices.add(candle.close);
+            self.prices.add(close).unwrap();
          
-            self.value+=candle.close;
+            self.value+=close;
             
 
         }
