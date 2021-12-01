@@ -10,7 +10,6 @@ use std::fs;
 use std::{thread, time};
 use std::sync::atomic::{AtomicBool};
 
-use crate::engine::backtester::*;
 use crate::strategy::{ma::*,sample::*};
 use crate::utils::types::*;
 
@@ -39,14 +38,14 @@ fn main() {
 
     dotenv().ok();
 
-    let mut mov_av_strat=MovingAverageStrategy::new(String::from("ethbusd"), Interval::D1,5);    
+    let mut mov_av_strat=MovingAverageStrategy::new(String::from("ethbusd"), Interval::D1,50);    
     
     let account=getAccount(env::var("API_KEY_TEST").unwrap(),env::var("SECRET_KEY_TEST").unwrap(), true);
     match account.get_account() {
         Ok(answer) => println!("{:?}", answer.balances),
         Err(e) => println!("Error: {:?}", e),
     }
-    execute(&mut mov_av_strat,5000.0,&account);
+    execute(true,&mut mov_av_strat,5000.0,&account);
 
 
 
