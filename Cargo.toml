@@ -16,5 +16,6 @@ chrono = "0.4.19"
 lru = "0.7.0"
 dotenv = "0.15.0"
 dotenv_codegen = "0.15.0"
+ta = "0.5.0"
 binance = { git = "https://github.com/wisespace-io/binance-rs.git" }
 

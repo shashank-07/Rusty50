@@ -1,5 +1,6 @@
 extern crate serde_json;
 extern crate priority_queue; // not necessary in Rust edition 2018
+extern crate chrono;
 
 #[macro_use]
 extern crate serde_derive;
@@ -39,13 +40,14 @@ fn main() {
     dotenv().ok();
 
     let mut mov_av_strat=MovingAverageStrategy::new(String::from("ethbusd"), Interval::D1,50);    
-    
+    let mut sample_av_strat=SampleStrategy::new(String::from("btcusdt"));    
+
     let account=getAccount(env::var("API_KEY_TEST").unwrap(),env::var("SECRET_KEY_TEST").unwrap(), true);
     match account.get_account() {
         Ok(answer) => println!("{:?}", answer.balances),
         Err(e) => println!("Error: {:?}", e),
     }
-    execute(true,&mut mov_av_strat,5000.0,&account);
+    execute(true,&mut sample_av_strat,5000.0,&account);
 
 
 

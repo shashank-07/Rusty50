@@ -6,8 +6,8 @@ use crate::engine::{strategy::*,order::*};
 use crate::indicators::{moving_average::*,price_trend::*,support_resistance::*};
 pub struct SampleStrategy{
     security: String,
-    indicator_sr:SupportResistance,
-    indicator_ma:MovingAverage
+    ind_sr:SupportResistance,
+    ind_ma:MovingAverage
 }
 impl SampleStrategy{
 
@@ -17,8 +17,8 @@ impl SampleStrategy{
 
             SampleStrategy {
             security,
-            indicator_sr:SupportResistance::new(3,10000),
-            indicator_ma:MovingAverage::new(Interval::D1,50)
+            ind_sr:SupportResistance::new(3,10000),
+            ind_ma:MovingAverage::new(Interval::D1,50)
 
         }
     }
@@ -28,22 +28,26 @@ impl SampleStrategy{
 impl Strategy for SampleStrategy{
      fn execute(&mut self, candle:&Kline,order: &mut Order,acccount:&Account) {
 
-        // let strength=&3;
-        // self.indicator_sr.update(candle);
-        // let ma_val=self.indicator_ma.getValue(candle);
+        let strength=&3;
+        self.ind_sr.update(candle);
 
-        // let price=candle.close as i32;
-        // if self.indicator_sr.support_set.contains(&price){
-        //     if self.indicator_sr.support_set.get(&price).unwrap()>strength && candle.close>ma_val {
-        //             order.buy(candle,1.0);
-        //     }
-        // }
-        // if self.indicator_sr.resistance_set.contains(&price) {
-        //     if self.indicator_sr.resistance_set.get(&price).unwrap()>strength && candle.close<ma_val{
-        //         println!("{}",order.last_bought);
-        //         order.sell(candle,1.0);
-        //     }
-        // }
+        let price=candle.close.parse::<f32>().unwrap() as i32;
+        if self.ind_sr.support_set.contains(&price){
+            if self.ind_sr.support_set.get(&price).unwrap()>strength{
+                    match order.buy(candle,1.0){
+                        Err(e)=>(),
+                        _=>()
+                    }
+            }
+        }
+        if self.ind_sr.resistance_set.contains(&price) {
+            if self.ind_sr.resistance_set.get(&price).unwrap()>&1{
+                match order.sell(candle,1.0){
+                    Err(e)=>(),
+                    _=>()
+                }
+            }
+        }
     }
 
     fn getSymbol(&self)->&String {

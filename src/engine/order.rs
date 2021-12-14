@@ -1,6 +1,7 @@
 use binance::model::Kline;
-
-
+use chrono::prelude::DateTime;
+use chrono::Utc;
+use std::time::{UNIX_EPOCH, Duration};
 #[derive(Debug)]
 pub struct Order{
     pub quantity_buy:f32, //quantity of the crypto bought
@@ -33,7 +34,13 @@ impl Order{
             self.budget-=quantity*price;
 
             self.last_bought=price;
-            println!("BOUGHT {} shares AT {} at {}",quantity as i32,price,candle.start_time);
+            
+            println!("BOUGHT {} shares AT {} at {}",
+                quantity as i32,
+                price,
+                DateTime::<Utc>::from(UNIX_EPOCH + Duration::from_secs((candle.start_time/1000) as u64))
+                    .format("%d-%m-%Y %H:%M:%S.%f")
+                    .to_string());
             Ok("Success")
             
         }else{
@@ -52,8 +59,15 @@ impl Order{
 
             self.quantity_buy-=quantity;
             self.budget+=sell_price;
+            
+        
+            println!("SOLD {} shares AT {} at {}",
+                quantity as i32,
+                price,
+                DateTime::<Utc>::from(UNIX_EPOCH + Duration::from_secs((candle.start_time/1000) as u64))
+                    .format("%d-%m-%Y %H:%M:%S.%f")
+                    .to_string());
 
-            println!("SOLD {} shares AT {} at {}",quantity as i32,price,candle.start_time);
             Ok("Success")
             
         }else{

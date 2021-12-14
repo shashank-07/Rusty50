@@ -1,5 +1,6 @@
 // Shows weather market is in uptrend or downtrend
 
+use binance::model::Kline;
 use lru::LruCache;
 
 use crate::utils::candle::*;
@@ -34,11 +35,14 @@ impl SupportResistance{
 
  
    
-    pub fn update(&mut self,candle:&Candle){
+    pub fn update(&mut self,candle:&Kline){
        let mut current_color=CandleColor::NONE;
-       if candle.close>candle.open {
+       let close = candle.close.parse::<f32>().unwrap();
+       let open = candle.open.parse::<f32>().unwrap();
+
+       if close>open {
            current_color=CandleColor::GREEN;
-       }else if candle.close<candle.open{
+       }else if close<open{
            current_color=CandleColor::RED;
        }
        if self.current_color!=current_color && self.current_color!=CandleColor::NONE && current_color != CandleColor::NONE{
@@ -54,8 +58,8 @@ impl SupportResistance{
                self.update_set(false);
            }
        }
-       self.last_close=candle.close as i32;
-       self.last_open= candle.open as i32;
+       self.last_close=close as i32;
+       self.last_open= open as i32;
        self.current_color=current_color;
       
     }
@@ -65,7 +69,6 @@ impl SupportResistance{
         if support{
             let low=self.last_close-(self.last_close*self.threshold/100);
             let high =self.last_close+(self.last_close*self.threshold/100); 
-            println!("{}, {}",low,high);
     
             for price in low..high+1{
                 let mut count =0;
@@ -96,7 +99,6 @@ impl SupportResistance{
         }else{
             let low=self.last_close-(self.last_close*self.threshold/100);
             let high =self.last_close+(self.last_close*self.threshold/100); 
-            println!("{}, {}",low,high);
     
             for price in low..high+1{
                 let mut count =0;
